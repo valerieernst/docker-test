@@ -4,12 +4,13 @@
   "description": "to test docker",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "nodemon": "^1.12.1"
   }
 }
