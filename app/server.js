@@ -37,5 +37,5 @@ app.post('/users', (req, res) => {
   });
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 80;
 app.listen(port, console.log(`app listening on ${port}`));
