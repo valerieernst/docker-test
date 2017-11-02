@@ -17,12 +17,27 @@ db_seed(db_connection);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Add headers
+app.use(function (req, res, next) {
+    // todo: unhardcode this!
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3030');
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    // Pass to next layer of middleware
+    next();
+});
+
 app.get('/', (req, res) => {
   res.send('this is a test api!');
 });
 
 app.get('/users',(req,res) => {
-  db_connection.query('SELECT * from user LIMIT 2', (err, rows, fields) => {
+  db_connection.query('SELECT * from user', (err, rows, fields) => {
   if (err) res.send(`there was a mysql error! here it is: ${err}`);
   res.send(rows);
   });
@@ -31,9 +46,14 @@ app.get('/users',(req,res) => {
 app.post('/users', (req, res) => {
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
-  db_connection.query(`INSERT INTO user (first_name, last_name) VALUES (${firstName}, ${lastName})`, (err) => {
-    if (err) res.send(`there was a mysql error! here it is: ${err}`);
-    res.send('success!');
+  db_connection.query(`INSERT INTO user (first_name, last_name) VALUES ('${firstName}', '${lastName}')`, (err, results) => {
+    if (err) {
+      console.error(`there was a mysql error! here it is: ${err}`);
+      res.sendStatus(400)
+    } else {
+      console.log('query results:', results)
+      res.sendStatus(200);
+    }
   });
 });
 
