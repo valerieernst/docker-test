@@ -36,14 +36,14 @@ app.get('/', (req, res) => {
   res.send('this is a test api!');
 });
 
-app.get('/users',(req,res) => {
+app.get('/api/users',(req,res) => {
   db_connection.query('SELECT * from user', (err, rows, fields) => {
   if (err) res.send(`there was a mysql error! here it is: ${err}`);
   res.send(rows);
   });
 });
 
-app.post('/users', (req, res) => {
+app.post('/api/users', (req, res) => {
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   db_connection.query(`INSERT INTO user (first_name, last_name) VALUES ('${firstName}', '${lastName}')`, (err, results) => {
