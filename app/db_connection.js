@@ -1,4 +1,4 @@
-const mysql      = require('mysql');
+const mysql = require('mysql');
 
 const host = process.env.MYSQL_HOST || 'dockertest_mysql_1';
 const user = process.env.DBUSER || 'root';

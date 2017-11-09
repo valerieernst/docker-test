@@ -1,8 +1,9 @@
 'use strict';
-const express    = require('express');
+const express = require('express');
 const db_connection = require('./db_connection.js');
 const db_seed = require('./db_seed.js');
 const bodyParser = require('body-parser');
+const { login, tokenRequired } = require('./auth_service.js');
 
 const app = express();
 
@@ -17,11 +18,11 @@ db_seed(db_connection);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
+app.get('/api/', (req, res) => {
   res.send('this is a test api!');
 });
 
-app.get('/api/users',(req,res) => {
+app.get('/api/users', tokenRequired, (req,res) => {
   db_connection.query('SELECT * from user', (err, rows, fields) => {
   if (err) res.send(`there was a mysql error! here it is: ${err}`);
   res.send(rows);
@@ -41,6 +42,8 @@ app.post('/api/users', (req, res) => {
     }
   });
 });
+
+app.post ('/api/login', login);
 
 const port = process.env.PORT || 80;
 app.listen(port, console.log(`app listening on ${port}`));
